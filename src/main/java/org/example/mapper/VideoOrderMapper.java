@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VideoOrderMapper {
     int save(VideoOrder videoOrder);
+    VideoOrder findOrderByUserIdAndVideoId(@Param("user_id") int userId,@Param("video_id") int videoId);
 }

@@ -19,18 +19,26 @@ public class VideoOrderServiceImpl implements VideoOrderService {
     private VideoService videoService;
     @Override
     public int save(int userId, int videoId) {
+        VideoOrder videoOrder = videoOrderMapper.findOrderByUserIdAndVideoId(userId, videoId);
+        if(videoOrder==null){return 0;}
         Video video = videoService.findDetailById(videoId);
-        VideoOrder videoOrder = new VideoOrder();
-        videoOrder.setVideoId(videoId);
-        videoOrder.setVideoImg(video.getCoverImg());
-        videoOrder.setVideoTitle(video.getTitle());
+        VideoOrder newvideoOrder = new VideoOrder();
+        newvideoOrder.setVideoId(videoId);
+        newvideoOrder.setVideoImg(video.getCoverImg());
+        newvideoOrder.setVideoTitle(video.getTitle());
 
-        videoOrder.setCreateTime(LocalDateTime.now());
-        videoOrder.setUserId(userId);
-        videoOrder.setTotalFee(video.getPrice());
-        videoOrder.setOutTradeNo(UUID.randomUUID().toString());
-        videoOrder.setState(1);
-        int i = videoOrderMapper.save(videoOrder);
+        newvideoOrder.setCreateTime(LocalDateTime.now());
+        newvideoOrder.setUserId(userId);
+        newvideoOrder.setTotalFee(video.getPrice());
+        newvideoOrder.setOutTradeNo(UUID.randomUUID().toString());
+        newvideoOrder.setState(1);
+        int i = videoOrderMapper.save(newvideoOrder);
         return i;
+    }
+
+    @Override
+    public VideoOrder findOrderByUserIdAndVideoId(int userId, int videoId) {
+        VideoOrder videoOrder = videoOrderMapper.findOrderByUserIdAndVideoId(userId, videoId);
+        return videoOrder;
     }
 }
