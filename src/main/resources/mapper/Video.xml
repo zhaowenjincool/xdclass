@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.mapper.VideoMapper">
+    <select id="list" resultType="Video">
+        select * from video
+    </select>
+
+    <resultMap id="VideoDetailMap" type="Video">
+        <id column="id" jdbcType="INTEGER" property="id"></id>
+        <result column="title" jdbcType="VARCHAR" property="title"></result>
+        <result column="summary" jdbcType="VARCHAR" property="summary"></result>
+        <result column="cover_img" jdbcType="VARCHAR" property="coverImg"></result>
+        <result column="price" jdbcType="INTEGER" property="price"></result>
+        <result column="point" jdbcType="DOUBLE" property="point"></result>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+        <collection property="chapterList" ofType="Chapter">
+            <id column="chapter_id" jdbcType="INTEGER" property="id"></id>
+            <result column="chapter_title" jdbcType="VARCHAR" property="title"></result>
+            <result column="chapter_ordered" jdbcType="INTEGER" property="ordered"></result>
+            <result column="chapter_create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+            <collection property="episodeList" ofType="Episode">
+                <id column="episode_id" jdbcType="INTEGER" property="id"></id>
+                <result column="episode_title" jdbcType="VARCHAR" property="title"></result>
+                <result column="num" jdbcType="INTEGER" property="num"></result>
+                <result column="episode_ordered" jdbcType="INTEGER" property="ordered"></result>
+                <result column="play_url" jdbcType="VARCHAR" property="playUrl"></result>
+                <result column="free" jdbcType="INTEGER" property="free"></result>
+                <result column="episode_create_time" jdbcType="TIMESTAMP" property="createTime"></result>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="findDetailById" parameterType="INTEGER" resultMap="VideoDetailMap">
+        select
+            a.id ,a.title ,a.summary ,a.cover_img ,a.price ,a.point,a.create_time ,
+            b.id chapter_id,b.title chapter_title,b.ordered chapter_ordered ,b.create_time chapter_create_time,
+            c.id episode_id,c.title episode_title,c.num ,c.ordered episode_ordered,c.play_url ,c.free,c.create_time episode_create_time
+        from video a left join chapter b on a.id =b.video_id  left join episode c on b.id =c.chapter_id where a.id=#{video_id}
+    </select>
+
+</mapper>
