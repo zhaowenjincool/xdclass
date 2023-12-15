@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.mapper.UserMapper">
+    <select id="findUserById" resultType="User">
+        select * from user where id=#{user_id}
+    </select>
+    
+    <insert id="save" parameterType="User">
+        insert into user(phone,name,pwd,head_img,create_time) values(#{phone},#{name},#{pwd},#{headImg},#{createTime})
+    </insert>
+
+    <select id="findUserByPhoneAndPwd" resultType="User">
+        select * from user where phone=#{phone} and pwd=#{pwd}
+    </select>
+
+</mapper>
